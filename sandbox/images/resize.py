@@ -1,5 +1,8 @@
-import StringIO
-import Image
+# coding=utf-8
+# Les StringIO et cStringIO modules sont partis. Au lieu de cela, importer le io module et utiliser io.StringIO ou io.BytesIO pour le texte et les données respectivement
+# Image est remplacée par PIL
+import io
+import PIL
 import argparse
 import logging
 import os
@@ -12,12 +15,12 @@ def resize_image(ratio, path, image_format=None):
     if image_format is None:
         filename, file_extension = os.path.splitext(path)
         image_format = file_extension.strip('.')
-    im = Image.open(path)
+    im = PIL.open(path)
     old_size = im.size
     im.thumbnail((int(old_size[0]*ratio),
                   int(old_size[1]*ratio)),
-                 Image.ANTIALIAS)
-    out = StringIO.StringIO()
+                 PIL.ANTIALIAS)
+    out = io.StringIO()   # ou io.BytesIO , out , c'est du texte ou un nombre ?
     im.save(out, image_format)
     val = out.getvalue()
     out.close()
@@ -84,9 +87,10 @@ if __name__ == '__main__':
     dir ="/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/data/"
     T=1000000
     resize_dir()  -t1000000  "/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/data/"
-    # le "-t1000000" soul�ve une erreur "unresolved reference" chez moi .
-    # Je passe l'interpr�teur de python 3.4 � python 2.7.6  : Le probl�me reste !
-    # Mais StringIO et image sont maintenant reconnus .
+    # le "-t1000000" soulève toujours une erreur "unresolved reference" chez moi .
+    # Je passe l'interprèteur de python 3.4 à python 2.7.6  : Le problème reste !
+    # Je repasse en python 3.4 et passe StingIO en io et Image en PIL
+   # Mais je n'ai pas changé les méthodes utilisées !
 
 #     /usr/bin/python2.7 /home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/images/resize.py
 #   File "/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/images/resize.py", line 86

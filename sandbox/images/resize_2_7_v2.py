@@ -31,7 +31,7 @@ def get_ratio_for_file_size(path, target_size):
     pour atteindre la taille visée .
 
     :param path: chemin de l'image à retailler
-    :param target_size: Taille visée pour l'image , en bytes
+    :param target_size: Taille visée pour l'image , en bytes, c'est à dire en octets
     :return: taux de réduction à demander pour obtenir cette taille .
     """
     if os.path.getsize(path) < target_size: # Si l'image passée est trop petite : ne rien faire
