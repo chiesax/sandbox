@@ -1,3 +1,4 @@
+# coding=utf-8
 import StringIO
 import Image
 import argparse
@@ -25,18 +26,31 @@ def resize_image(ratio, path, image_format=None):
 
 
 def get_ratio_for_file_size(path, target_size):
-    if os.path.getsize(path) < target_size:
+    """
+    Calcule le ratio de réduction du fichier image à utiliser
+    pour atteindre la taille visée .
+
+    :param path: chemin de l'image à retailler
+    :param target_size: Taille visée pour l'image , en bytes
+    :return: taux de réduction à demander pour obtenir cette taille .
+    """
+    if os.path.getsize(path) < target_size: # Si l'image passée est trop petite : ne rien faire
         return 1.0
 
     def f(ratio):
-        ntf = NamedTemporaryFile(delete=False)
-        ntf.write(resize_image(ratio, path))
+        """
+
+        :param ratio: taux de réduction demandé
+        :return: Écart , en valeur absolue , de la taille obtenue pour ce ratio , à la taille visée
+        """
+        ntf = NamedTemporaryFile(delete=False) # crée un fichier donc vide
+        ntf.write(resize_image(ratio, path)) # Recopie dedans
         ntf.close()
         fsize = os.path.getsize(ntf.name)
         return abs(fsize - target_size)
 
     r = minimize_scalar(f, method='Bounded', bounds=(0.1, 1.0))
-    return r.x
+    return r.x  # C'est quoi "x" ?
 
 
 def resize_dir():
@@ -77,26 +91,11 @@ def resize_dir():
             logging.exception(e)
 
 
-#   TEST
 
+# ---------------------------      TEST     ---------------
 if __name__ == '__main__':
-
-    dir ="/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/data/"
-    T=1000000
-    resize_dir()  -t1000000  "/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/data/"
-    # le "-t1000000" soul�ve une erreur "unresolved reference" chez moi .
-    # Je passe l'interpr�teur de python 3.4 � python 2.7.6  : Le probl�me reste !
-    # Mais StringIO et image sont maintenant reconnus .
-
-#     /usr/bin/python2.7 /home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/images/resize.py
-#   File "/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/images/resize.py", line 86
-#     resize_dir()  -t1000000  "/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/data/"
-#                                                                                           ^
-# SyntaxError: invalid syntax
-#
-# Process finished with exit code 1
-
-
-
-
-
+    path_photo = "/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/data/Eglise de Songeons.png"
+    target_taille = 1000000
+    # resize_dir()
+    rapport, xx = get_ratio_for_file_size(path_photo, target_taille)
+    print(rapport)
