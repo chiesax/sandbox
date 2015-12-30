@@ -30,30 +30,37 @@ import os
 import scipy
 from scipy.optimize._minimize import minimize_scalar
 from tempfile import NamedTemporaryFile
+from PIL import Image
 
 
 def resize_image(ratio, path, image_format=None):
     """
-    C'est quoi thumbnail ?
+    thumbnail est une imagette
 
     :param ratio:entier   : Taux de réduction
     :param path:  string :  chemin du fichier image à réduire .
-    :param image_format: string : extension indiquant le type de l'image (jpeg, png , bmp , tiff etc )
-    :return: Je ne sais pas
+    :param image_format: string : extension indiquant le type de l'image (PPM, PNG, JPEG, GIF, TIFF and BMP etc )
+    :return: float : Taille du fichier "imagette"
     """
     if image_format is None:
         filename, file_extension = os.path.splitext(path)
         image_format = file_extension.strip('.')
-    im = PIL.open(path)
-    old_size = im.size
-    im.thumbnail((int(old_size[0]*ratio),
-                  int(old_size[1]*ratio)),
-                 PIL.ANTIALIAS)
-    out = io.StringIO()   # ou io.BytesIO , out , c'est du texte ou un nombre ?
-    im.save(out, image_format)
-    val = out.getvalue()
-    out.close()
-    return val
+    im = Image.open(path) # crée un objet Image de PIL
+    old_size = im.size # c'est un tuple de deux éléments , la hauteur et la largeur
+    # https://pillow.readthedocs.org/en/3.0.x/reference/Image.html?highlight=thumbnail
+    # réduire la taille à une taille fixée
+    im.thumbnail((int(old_size[0]*ratio),   # nouvelle hauteur
+                  int(old_size[1]*ratio)),  # nouvelle largeur
+                 PIL.Image.ANTIALIAS)       # Argument de rééchantillonnage
+    # https://pillow.readthedocs.org/en/3.0.x/releasenotes/2.7.0.html?highlight=antialias
+    out = io.StringIO()   # ou io.BytesIO , out , c'est un string
+    im.save(out, image_format) # sauvegarde l'objet Image "PIL" dans le fichier de nom out
+                               # (chaine de caractère) , de format image_format
+                               # (chaine de caractère) lel que : "png"
+    val = out.getvalue()       # flottant : taille du fichier obtenu
+    out.close()                # on ferme ce fichier image
+    print("taille atteinte :",val)
+    return val      # float : Taille du fichier "imagette"
 
 
 def get_ratio_for_file_size(path, target_size):
