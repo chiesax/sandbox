@@ -10,4 +10,5 @@ setup(
         'console_scripts': [
             'sandbox_resize_dir = sandbox.images.resize:resize_dir',
         ]},
+    packages=['sandbox', 'sandbox.images']
 )
