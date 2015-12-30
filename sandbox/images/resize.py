@@ -60,7 +60,7 @@ def resize_image(ratio, path, image_format=None):
     val = out.getvalue()       # fichier image de l'image réduite ,enregistré comme une chaîne de
     # caractères dans la variable val
     out.close()                # on ferme ce fichier image
-    print("taille atteinte :",val)
+
     return val      # l' imagette , stokée comme un string
 
 
