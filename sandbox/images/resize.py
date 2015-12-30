@@ -40,7 +40,7 @@ def resize_image(ratio, path, image_format=None):
     :param ratio:entier   : Taux de réduction
     :param path:  string :  chemin du fichier image à réduire .
     :param image_format: string : extension indiquant le type de l'image (PPM, PNG, JPEG, GIF, TIFF and BMP etc )
-    :return: float : Taille du fichier "imagette"
+    :return: string : l' imagette , stokée comme un string
     """
     if image_format is None:
         filename, file_extension = os.path.splitext(path)
@@ -53,14 +53,15 @@ def resize_image(ratio, path, image_format=None):
                   int(old_size[1]*ratio)),  # nouvelle largeur
                  PIL.Image.ANTIALIAS)       # Argument de rééchantillonnage
     # https://pillow.readthedocs.org/en/3.0.x/releasenotes/2.7.0.html?highlight=antialias
-    out = io.StringIO()   # ou io.BytesIO , out , c'est un string
+    out = io.BytesIO()   # ou io.StringIO . " out " , c'est un "flux binaire"
     im.save(out, image_format) # sauvegarde l'objet Image "PIL" dans le fichier de nom out
                                # (chaine de caractère) , de format image_format
                                # (chaine de caractère) lel que : "png"
-    val = out.getvalue()       # flottant : taille du fichier obtenu
+    val = out.getvalue()       # fichier image de l'image réduite ,enregistré comme une chaîne de
+    # caractères dans la variable val
     out.close()                # on ferme ce fichier image
     print("taille atteinte :",val)
-    return val      # float : Taille du fichier "imagette"
+    return val      # l' imagette , stokée comme un string
 
 
 def get_ratio_for_file_size(path, target_size):
