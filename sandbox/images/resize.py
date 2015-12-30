@@ -10,7 +10,9 @@ On lui passe cette taille (T) et le chemin du dossier (dir ) de la manière suiv
 resize.py -t800000   "/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/data/"
 
 Le "-t" est obligatoire , le chemin doit être entre guillemets anglais .
-On ne peut passer la taille et le chemin via des variables .
+
+Il ne touche pas aux images d'origine, mais crée de nouvelles images de la taille désirée .
+Il les place dans le même dossier .
 """
 # Les deux lignes du début serviraient si on rendait ce fichier
 # directement exécutable
@@ -31,6 +33,14 @@ from tempfile import NamedTemporaryFile
 
 
 def resize_image(ratio, path, image_format=None):
+    """
+    C'est quoi thumbnail ?
+
+    :param ratio:entier   : Taux de réduction
+    :param path:  string :  chemin du fichier image à réduire .
+    :param image_format: string : extension indiquant le type de l'image ( png , bmp , tiff etc )
+    :return: Je ne sais pas
+    """
     if image_format is None:
         filename, file_extension = os.path.splitext(path)
         image_format = file_extension.strip('.')
@@ -47,22 +57,49 @@ def resize_image(ratio, path, image_format=None):
 
 
 def get_ratio_for_file_size(path, target_size):
+    """
+
+    :param path: string :  chemin du dossier où sont les images à retailler .
+    :param target_size: entier : taille visée en octets (Bytes)
+    :return: Taux de réduction à utiliser   ,    variable que je n'ai pas comprise :  x
+    """
     if os.path.getsize(path) < target_size:
         return 1.0
 
     def f(ratio):
+        """
+        Crée un fichier temporaire contenant l'image retaillée .
+        calcule sa taille .
+        La compare à la taille visée .
+        ferme le fichier
+        :param ratio: entier : Taux de rféduction .
+        :return: float : écart absolu entre la taille visée et la taille obtenue .
+        """
         ntf = NamedTemporaryFile(delete=False)
         ntf.write(resize_image(ratio, path))
         ntf.close()
         fsize = os.path.getsize(ntf.name)
         return abs(fsize - target_size)
 
-    r = minimize_scalar(f, method='Bounded', bounds=(0.1, 1.0))
+    r = minimize_scalar(f, method='Bounded', bounds=(0.1, 1.0)) # manipule le paramètre scalaire de f , à savoir ratio
+    # pour minimiser f
     return r.x
 
 
 def resize_dir():
     """
+    Fabrique de nouveaux fichiers image de la taille requise .
+    Utilise les fonctions définies ci-dessus .
+    Elle ne touche pas aux images d'origine, mais crée de nouvelles images de la taille désirée .
+    Elle les place dans le même dossier .
+
+    Cette fonction utilise les paramètres :
+    dir : 'the path to the directory containing the images '
+          'to be resized. All images contained in the directory '
+          'will be processed.'
+    -t   : 'target size (in bytes) of the images.'
+    Qui sont passés directement à l'intèrieur de la fonction .
+
 
     :return:
     """
