@@ -29,7 +29,10 @@ import logging
 import os
 import scipy
 from scipy.optimize._minimize import minimize_scalar
-from tempfile import NamedTemporaryFile
+
+from tempfile import NamedTemporaryFile   # Crée et manipule des fichiers temporaires
+# stockés dans un "nom" (name) soit, je pense, une variable
+# https://docs.python.org/2/library/tempfile.html?highlight=tempfile#module-tempfile
 from PIL import Image
 
 
@@ -42,6 +45,9 @@ def resize_image(ratio, path, image_format=None):
     :param image_format: string : extension indiquant le type de l'image (PPM, PNG, JPEG, GIF, TIFF and BMP etc )
     :return: string : l' imagette , stokée comme un string
     """
+    init_size = os.path.getsize(path)
+    print("taille de l'image originale",init_size,"soit",float(init_size)/1000," kO")
+
     if image_format is None:
         filename, file_extension = os.path.splitext(path)
         image_format = file_extension.strip('.')
@@ -86,7 +92,12 @@ def get_ratio_for_file_size(path, target_size):
         ntf = NamedTemporaryFile(delete=False)
         ntf.write(resize_image(ratio, path))
         ntf.close()
-        fsize = os.path.getsize(ntf.name)
+        fsize = os.path.getsize(ntf.name)  # type : "long"  ;  Long integers have unlimited precision
+                                           # taille du fichier
+
+        taux_txt = "taux de reduction : "
+        print(taux_txt,ratio)
+        print("taille atteinte :","soit",float(fsize)/1000," kO")
         return abs(fsize - target_size)
 
     r = minimize_scalar(f, method='Bounded', bounds=(0.1, 1.0)) # manipule le paramètre scalaire de f , à savoir ratio
