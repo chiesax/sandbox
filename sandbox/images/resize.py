@@ -1,6 +1,25 @@
-# coding=utf-8
-# Les StringIO et cStringIO modules sont partis. Au lieu de cela, importer le io module et utiliser io.StringIO ou io.BytesIO pour le texte et les données respectivement
+#!/usr/bin/python3.4
+# -*-coding:utf-8 -*
+"""
+Docstring de module :
+Ce module permet de retailler des images contenues dans un dossier,
+en imposant une taille (poids) en octets (Bytes) .
+donc munies de leurs unités .
+On lui passe cette taille (T) et le chemin du dossier (dir ) de la manière suivante :
+
+resize.py -t800000   "/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/data/"
+
+Le "-t" est obligatoire , le chemin doit être entre guillemets anglais .
+On ne peut passer la taille et le chemin via des variables .
+"""
+# Les deux lignes du début serviraient si on rendait ce fichier
+# directement exécutable
+
+# Différences avec la version python 2.7 :
+# Les StringIO et cStringIO modules sont partis. Au lieu de cela, importer le io module
+# et utiliser io.StringIO ou io.BytesIO pour le texte et les données respectivement
 # Image est remplacée par PIL
+
 import io
 import PIL
 import argparse
@@ -86,7 +105,7 @@ if __name__ == '__main__':
 
     dir ="/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/data/"
     T=1000000
-    resize_dir()  -t1000000  "/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/data/"
+    # resize_dir() -t1000000    "/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/data/"
     # le "-t1000000" soulève toujours une erreur "unresolved reference" chez moi .
     # Je passe l'interprèteur de python 3.4 à python 2.7.6  : Le problème reste !
     # Je repasse en python 3.4 et passe StingIO en io et Image en PIL
