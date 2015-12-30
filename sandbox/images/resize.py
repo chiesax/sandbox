@@ -105,7 +105,7 @@ def get_ratio_for_file_size(path, target_size):
     return r.x
 
 
-def resize_dir():
+def resize_dir(args=None):
     """
     Fabrique de nouveaux fichiers image de la taille requise .
     Utilise les fonctions définies ci-dessus .
@@ -134,7 +134,7 @@ def resize_dir():
 
     parser.add_argument('-t', help='target size (in bytes) of the images.',
                         default=None, required=True, type=_positive_int)
-    opt = parser.parse_args()
+    opt = parser.parse_args(args=args)
     if not os.path.exists(opt.dir):
         raise Exception('the specified path {} does not exist!'.format(opt.dir))
     for fname in os.listdir(opt.dir):
@@ -146,7 +146,7 @@ def resize_dir():
             new_file_path = os.path.join(opt.dir, 'new_{}'.format(fname))
             if os.path.exists(new_file_path):
                 raise Exception('file {} exist already'.format(new_file_path))
-            with open(new_file_path, 'w') as f:
+            with open(new_file_path, 'bw') as f:
                 f.write(resize_image(best_ratio, file_path))
             logging.info('image {} resized to {}, ratio {}'.format(file_path,
                                                                    new_file_path,
@@ -158,22 +158,9 @@ def resize_dir():
 #   TEST
 
 if __name__ == '__main__':
+    dir = os.path.join(os.path.dirname(__file__), '..', 'data')
+    resize_dir(args=['-t', '1000000', dir])
 
-    dir ="/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/data/"
-    T=1000000
-    # resize_dir() -t1000000    "/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/data/"
-    # le "-t1000000" soulève toujours une erreur "unresolved reference" chez moi .
-    # Je passe l'interprèteur de python 3.4 à python 2.7.6  : Le problème reste !
-    # Je repasse en python 3.4 et passe StingIO en io et Image en PIL
-   # Mais je n'ai pas changé les méthodes utilisées !
-
-#     /usr/bin/python2.7 /home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/images/resize.py
-#   File "/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/images/resize.py", line 86
-#     resize_dir()  -t1000000  "/home/jean-louis_s/Documents/JL_Python/sandbox/sandbox/data/"
-#                                                                                           ^
-# SyntaxError: invalid syntax
-#
-# Process finished with exit code 1
 
 
 
