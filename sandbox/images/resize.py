@@ -20,7 +20,7 @@ Il les place dans le même dossier .
 # Différences avec la version python 2.7 :
 # Les StringIO et cStringIO modules sont partis. Au lieu de cela, importer le io module
 # et utiliser io.StringIO ou io.BytesIO pour le texte et les données respectivement
-# Image est remplacée par PIL
+# Image est remplacée par PIL (Python Imaging Library )
 
 import io
 import PIL
@@ -38,7 +38,7 @@ def resize_image(ratio, path, image_format=None):
 
     :param ratio:entier   : Taux de réduction
     :param path:  string :  chemin du fichier image à réduire .
-    :param image_format: string : extension indiquant le type de l'image ( png , bmp , tiff etc )
+    :param image_format: string : extension indiquant le type de l'image (jpeg, png , bmp , tiff etc )
     :return: Je ne sais pas
     """
     if image_format is None:
