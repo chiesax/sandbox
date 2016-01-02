@@ -3,7 +3,7 @@ __author__ = 'samu'
 from setuptools import setup
 
 setup(
-    version='1.0',
+    version='0.1',
     name='sandbox',
     install_requires=['Pillow', 'scipy', 'numpy'],
     entry_points={
