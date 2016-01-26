@@ -5,8 +5,7 @@ Created by stephanep on 09.06.15
 Copyright 2015 Alpes Lasers SA, Neuchatel, Switzerland
 """
 import argparse
-from ProjectManager.install_project.main import InstallProject
-from ProjectManager.utils.pip_utils import check_pip_config_files
+from sandbox.install_project.main import InstallProject
 
 __author__ = 'stephanep'
 __copyright__ = "Copyright 2015, Alpes Lasers SA"
@@ -36,7 +35,6 @@ def main():
         install_proj.set_betatest()
     if options.force:
         install_proj.set_force()
-    check_pip_config_files(ignore_upload=True)  # The upload part isn't needed for install only, but localshop is
     # mandatory
     install_proj.run()
 
